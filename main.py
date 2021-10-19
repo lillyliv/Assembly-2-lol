@@ -2,28 +2,50 @@ import sys
 import os
 
 from std import std
+
 # opcodes list
 # 0: include
 # 1: add
 # 2: sub
 # 3: call
 # 4: push
+# 5: pop to variable
+# 6: declare variable
+# 7: set value to variable
 
 program = [
+    6, "testString", 100, #declare variable
     0, 1,       # include standard lib
     1, 98, 1,   # add second to third and push to stack
     3, "dump",  # dump
     4, 10,      # push 10 (newline) to stack
-    3, "dump"   # dump
+    3, "dump",  # dump
+    4, 98,      # push and print char constant
+    3, "print"  # print
 ]
+
 def compile():
     with open('out.asm', 'w') as file:
         print('compiling...')
+
+        i = 0
+
         file.write('global _start\n')
         file.write('section .bss\n')
         file.write('toDump resb 8\n')
+        file.write('toPrint resb 1000\n')
+
+        while(i < len(program)):
+            if program[i] == 6:
+                print('decalre variable')
+                file.write('%s resb %s\n' % (program[i+1], program[i+2]))
+                i+=2
+            else:
+                break
+            i+=1
+
         file.write('section .text\n')
-        i = 0
+
         while(i < len(program)):
             if program[i] == 0:
                 print('import')
@@ -39,6 +61,12 @@ def compile():
                 print('add opcode')
                 file.write('    ;;add\n')
                 file.write('    mov rax, %s + %s\n' % (program[i+1], program[i+2]))
+                file.write('    push rax\n')
+                i+=2
+            elif program[i] == 2:
+                print('sub opcode')
+                file.write('    ;;subtract\n')
+                file.write('    mov rax, %s - %s\n' % (program[i+1], program[i+2]))
                 file.write('    push rax\n')
                 i+=2
             elif program[i] == 3:
