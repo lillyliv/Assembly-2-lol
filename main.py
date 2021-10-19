@@ -6,15 +6,15 @@ from std import std
 # 0: include
 # 1: add
 # 2: sub
-# 3: dump : prints last thing on the stack and removes item
+# 3: call
 # 4: push
 
 program = [
     0, 1,       # include standard lib
     1, 98, 1,   # add second to third and push to stack
-    3,          # dump
+    3, "dump",  # dump
     4, 10,      # push 10 (newline) to stack
-    3           # dump
+    3, "dump"   # dump
 ]
 def compile():
     with open('out.asm', 'w') as file:
@@ -42,9 +42,10 @@ def compile():
                 file.write('    push rax\n')
                 i+=2
             elif program[i] == 3:
-                print('dump')
-                file.write('    ;;dump\n')
-                file.write('    call dump\n')
+                print('call: %s' % program[i+1])
+                file.write('    ;;call\n')
+                file.write('    call %s\n' % program[i+1])
+                i+=1
             elif program[i] == 4:
                 print('push')
                 file.write('    ;;push to stack\n')
