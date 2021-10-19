@@ -1,8 +1,9 @@
 import sys
 
-def std(file):
+def std(file, lib):
     print('including std lib...')
-    stdFile = open('libs/std.asm', 'r')
+    print(lib)
+    stdFile = open(lib, 'r')
     lines = stdFile.readlines()
 
     for line in lines:
