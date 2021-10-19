@@ -15,4 +15,7 @@ This can be compiled by changing program in main.py, then running
 ```
 python3 main.py -c
 ```
-If there are no errors, run ./out
+If there are no errors, run
+```
+./out
+```
