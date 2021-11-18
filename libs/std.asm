@@ -52,4 +52,5 @@ print:
     push r10
 
     ret
+
 ;;End of functions from library std
